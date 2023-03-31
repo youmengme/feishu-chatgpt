@@ -1,9 +1,11 @@
 edition: 1.0.0
-name: feishuBot-chatGpt
+name: feishuBot-chatGpt-wdd
 access: "aliyun" #  秘钥别名
 
 vars: # 全局变量
-  region: "ap-southeast-1"
+  region: "ap-northeast-1"
+  fcname: "feishu-chatgpt-wdd"
+  domain: "feishu-bot-wdd.xurao.cn"
 
 services:
   helloworld:
@@ -25,7 +27,7 @@ services:
         name: "feishubot"
         description: "Serverless Devs Website Service"
       function:
-        name: "feishu-chatgpt"
+        name: ${vars.fcname}
         description: 'a simple feishubot by serverless devs'
         codeUri: './code'
         cAPort: 9000
@@ -34,11 +36,11 @@ services:
             - ./target/main
         environmentVariables: {}
         handler: index.handler
-        instanceConcurrency: 20
+        instanceConcurrency: 50
         instanceType: e1
-        memorySize: 128
+        memorySize: 256
         runtime: custom
-        timeout: 120
+        timeout: 240
         internetAccess: true
       triggers:
         - name: httpTrigger
@@ -49,7 +51,7 @@ services:
               - GET
               - POST
       customDomains:
-        - domainName: auto
+        - domainName: ${vars.domain}
           protocol: HTTP
           routeConfigs:
             - path: /*
